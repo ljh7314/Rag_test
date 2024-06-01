@@ -20,9 +20,9 @@ from langchain.memory import StreamlitChatMessageHistory
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 
+
 def main():
     
-    os.environ["GOOGLE_API_KEY"] = "AIzaSyBGeIEC8AitFlcxTnKO54P9dSRD09aJnpk"
     st.set_page_config(
     page_title="Streamlit_Rag",
     page_icon=":books:")
@@ -40,8 +40,13 @@ def main():
 
     with st.sidebar:
         uploaded_files =  st.file_uploader("Upload your file",type=['pdf','docx'],accept_multiple_files=True)
+        google_api_key = st.text_input("Google API Key", key="chatbot_api_key", type="password")
+        os.environ["GOOGLE_API_KEY"]=google_api_key
         process = st.button("Process")
     if process:
+        if not google_api_key:
+            st.info("Please add your OpenAI API key to continue.")
+            st.stop()
         files_text = get_text(uploaded_files)
         text_chunks = get_text_chunks(files_text)
         vetorestore = get_vectorstore(text_chunks)

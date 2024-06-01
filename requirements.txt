@@ -9,3 +9,4 @@ openai
 pypdf
 loguru
 docx2txt
+langchain_google_genai
